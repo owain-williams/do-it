@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en" className="h-full bg-white">
       <body className={`${inter.className} h-full`}>
         <NavbarHome />
-        {children}
+        <main className="lg:ml-72">{children}</main>
       </body>
     </html>
   );

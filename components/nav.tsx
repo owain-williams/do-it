@@ -10,9 +10,11 @@ import {
   HomeIcon,
   UsersIcon,
   XMarkIcon,
+  Cog6ToothIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { UserButton, useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 import { usePathname } from "next/navigation";
 
@@ -23,16 +25,24 @@ function classNames(...classes: any[]) {
 export default function NavbarHome() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathName = usePathname();
-  const { user } = useUser();
+  const { user, isLoaded, isSignedIn } = useUser();
+
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
+  if (!isSignedIn) {
+    return <div>Please sign in</div>;
+  }
 
   if (!user) {
-    return <div>Please sign in</div>;
+    return <></>;
   }
 
   const navigation = [
     {
       name: "Dashboard",
-      href: "#",
+      href: "/dashboard",
       icon: HomeIcon,
       current: pathName === "/dashboard",
     },
@@ -61,10 +71,10 @@ export default function NavbarHome() {
       current: pathName === "/dashboard/documents",
     },
     {
-      name: "Reports",
-      href: "/dashboard/reports",
-      icon: ChartPieIcon,
-      current: pathName === "/dashboard/reports",
+      name: "Settings",
+      href: "/dashboard/settings",
+      icon: Cog6ToothIcon,
+      current: pathName === "/dashboard/settings",
     },
   ];
   const teams = [
@@ -145,7 +155,7 @@ export default function NavbarHome() {
                           <ul role="list" className="-mx-2 space-y-1">
                             {navigation.map((item) => (
                               <li key={item.name}>
-                                <a
+                                <Link
                                   href={item.href}
                                   className={classNames(
                                     item.current
@@ -164,7 +174,7 @@ export default function NavbarHome() {
                                     aria-hidden="true"
                                   />
                                   {item.name}
-                                </a>
+                                </Link>
                               </li>
                             ))}
                           </ul>
